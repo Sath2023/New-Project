@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Ordering System</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        section {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .category {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .category-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .category-button:hover {
+            background-color: #45a049;
+        }
+
+        .food-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .food-item img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 10px;
+        }
+
+        .total-price-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h1>Food Ordering System</h1>
+
+        <section class="category">
+            <button class="category-button" onclick="showCategory('northIndian')">North Indian</button>
+            <button class="category-button" onclick="showCategory('southIndian')">South Indian</button>
+            <button class="category-button" onclick="showCategory('chinese')">Chinese</button>
+            <button class="category-button" onclick="showCategory('chats')">Chats</button>
+        </section>
+
+        <section id="foodItems" class="food-items"></section>
+
+        <section class="total-price-container">
+            <p>Total Price: $<span id="total-price">0</span></p>
+            <button onclick="goToTransactionPage()">Proceed to Payment</button>
+        </section>
+    </section>
+
+    <script>
+        const foodMenu = {
+            northIndian: [
+                { name: "Chole Batura", price: 12, img: "images/chole batura.jpg" },
+                { name: "Paneer Tikka", price: 10, img: "images/paneer-tikka.jpeg" },
+                { name: "Dal Makhani", price: 8, img: "images/dal makhani.jpg" },
+                { name: "Naan", price: 5, img: "images/naan.jpg" }
+            ],
+            southIndian: [
+                { name: "Dosa", price: 7, img: "images/dosa.jpg" },
+                { name: "Idli and Vada", price: 6, img: "images/idli vada.webp" },
+                { name: "Pongal", price: 8, img: "images/pongal.jpg" },
+                { name: "BIsibele Bath", price: 5, img: "images/bisibele bath.jpg" }
+            ],
+            chinese: [
+                { name: "Manchow Soup", price: 10, img: "images/,amchow soup.jpg" },
+                { name: "Fried Rice", price: 12, img: "images/fried rice.webp" },
+                { name: "Spring Rolls", price: 15, img: "images/spring rolls.jpg" },
+                { name: "Manchurian", price: 8, img: "images/manchurian.jpg" }
+            ],
+            chats: [
+                { name: "Pani Puri", price: 5, img: "images/pani puri.webp" },
+                { name: "Bhel Puri", price: 7, img: "images/bhel puri.jpg" },
+                { name: "Raj Kachori", price: 7, img: "images/raj kachori.webp" },
+                { name: "Pav Bhaji", price: 8, img: "images/pav bhaji.jpg" }
+            ]
+        };
+
+        function showCategory(category) {
+            const foodItemsDiv = document.getElementById("foodItems");
+            const items = foodMenu[category];
+            foodItemsDiv.innerHTML = "";
+            items.forEach(item => {
+                const foodItem = document.createElement("div");
+                foodItem.className = "food-item";
+                foodItem.innerHTML = `<img src="${item.img}" alt="${item.name}">
+                                       <label><input type="checkbox" class="item" data-price="${item.price}" onchange="updateTotalPrice()">${item.name} - $${item.price}</label>`;
+                foodItemsDiv.appendChild(foodItem);
+            });
+            updateTotalPrice();
+        }
+
+        const totalPriceElement = document.getElementById('total-price');
+        const DELIVERY_CHARGE = 5.00;
+
+        function updateTotalPrice() {
+            let total = 0;
+            document.querySelectorAll('.item:checked').forEach(item => {
+                const price = parseFloat(item.dataset.price);
+                total += price;
+            });
+            totalPriceElement.textContent = (total + DELIVERY_CHARGE).toFixed(2);
+        }
+
+        function goToTransactionPage() {
+            const totalPrice = totalPriceElement.textContent;
+            window.location.href = `transaction.html?total=${totalPrice}`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction Page</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <h1>Select Payment Method</h1>
+    <p>Total Price: $<span id="total-price"></span></p>
+    <button onclick="pay('credit')">
+        <img src="card.webp">
+    </button>
+    <button onclick="pay('upi')">
+        <img src="UPI.jpg">
+    </button>
+    <button onclick="pay('cod')">
+        <img src="COD.png" height="30%">
+    </button>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        document.getElementById('total-price').innerText = getQueryParam('total');
+
+        function pay(method) {
+            const totalPrice = getQueryParam('total');
+            window.location.href = `${method}.html?total=${totalPrice}`;
+        }
+    </script>
+</body>
+</html>
